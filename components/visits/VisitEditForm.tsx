@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Alert } from "react-native";
 import DatePicker from "react-native-date-picker";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
 
-export default function VisitEditForm() {
+interface Props {
+	onCancel: () => void;
+	onSave: (startDate: Date, endDate?: Date) => void;
+}
+
+export default function VisitEditForm(props: Props) {
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
@@ -15,20 +20,44 @@ export default function VisitEditForm() {
 		return date ? date : new Date();
 	};
 
+	const saveVisit = () => {
+		if (startDate === undefined) {
+			Alert.alert("Дату заїзду потрібно обов'язково вказати!");
+			return;
+		}
+		props.onSave(startDate, endDate);
+	};
+
 	return (
 		<>
 			<ThemedView>
-				<ThemedText type="title">Перебування на позиціях</ThemedText>
+				<View style={styles.row}>
+					<ThemedText type="subtitle">час перебування на позиціях:</ThemedText>
+				</View>
 				<View style={styles.row}>
 					<Pressable style={styles.dateWrapper} onPress={() => setDateUnderEdit("start")}>
 						<ThemedText type="defaultSemiBold">заїзд</ThemedText>
 						<ThemedText type="subtitle">
-							{startDate ? startDate.toLocaleDateString() : "вибрати..."}
+							{startDate ? startDate.toLocaleDateString("uk") : "вибрати..."}
 						</ThemedText>
 					</Pressable>
 					<Pressable style={styles.dateWrapper} onPress={() => setDateUnderEdit("end")}>
 						<ThemedText type="defaultSemiBold">виїзд</ThemedText>
-						<ThemedText type="subtitle">{endDate ? endDate.toLocaleDateString() : "вибрати..."}</ThemedText>
+						<ThemedText type="subtitle">
+							{endDate ? endDate.toLocaleDateString("uk") : "вибрати..."}
+						</ThemedText>
+					</Pressable>
+					<View style={styles.counterWrapper}>
+						<ThemedText type="defaultSemiBold">днів</ThemedText>
+						<ThemedText type="subtitle">{"12"}</ThemedText>
+					</View>
+				</View>
+				<View style={styles.row}>
+					<Pressable onPress={props.onCancel}>
+						<ThemedText type="defaultSemiBold">скасувати</ThemedText>
+					</Pressable>
+					<Pressable onPress={saveVisit}>
+						<ThemedText type="defaultSemiBold">зберегти</ThemedText>
 					</Pressable>
 				</View>
 			</ThemedView>
@@ -63,8 +92,14 @@ const styles = StyleSheet.create({
 		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-evenly",
+		paddingTop: 16,
 	},
 	dateWrapper: {
+		flex: 3,
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	counterWrapper: {
 		flex: 1,
 		justifyContent: "space-between",
 		alignItems: "center",
