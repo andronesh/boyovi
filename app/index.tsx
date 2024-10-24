@@ -1,15 +1,17 @@
-import { Text, View } from "react-native";
+import { ThemedView } from "@/components/ThemedView";
+import VisitEditForm from "@/components/visits/VisitEditForm";
+import Constants from "expo-constants";
 
 export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+	return (
+		<ThemedView
+			style={{
+				flex: 1,
+				paddingHorizontal: 16,
+				paddingTop: Constants.statusBarHeight + 8,
+			}}
+		>
+			<VisitEditForm />
+		</ThemedView>
+	);
 }
