@@ -4,15 +4,21 @@ import DatePicker from "react-native-date-picker";
 import { ThemedText } from "../ThemedText";
 import dayjs from "dayjs";
 import { ThemedBlock } from "../ThemedBlock";
+import { VisitEntity } from "@/database/visitsDAF";
 
 interface Props {
+	visit?: VisitEntity;
 	onCancel: () => void;
 	onSave: (startDate: Date, endDate?: Date) => void;
 }
 
 export default function VisitEditForm(props: Props) {
-	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+	const [startDate, setStartDate] = useState<Date | undefined>(
+		props.visit ? new Date(props.visit.startDate) : undefined,
+	);
+	const [endDate, setEndDate] = useState<Date | undefined>(
+		props.visit?.endDate ? new Date(props.visit.endDate) : undefined,
+	);
 	const [daysCount, setDaysCount] = useState<number | undefined>(undefined);
 
 	const [dateUnderEdit, setDateUnderEdit] = useState<"start" | "end" | undefined>();

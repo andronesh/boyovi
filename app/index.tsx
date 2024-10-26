@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import VisitDetailsEditable from "@/components/visits/VisitDetailsEditable";
 import VisitEditForm from "@/components/visits/VisitEditForm";
 import { getAllVisits, insertVisit, VisitEntity } from "@/database/visitsDAF";
 import Constants from "expo-constants";
@@ -44,11 +45,7 @@ export default function Index() {
 		>
 			{visits &&
 				visits.map((visit) => (
-					<ThemedText key={visit.id} type="subtitle" style={{ padding: 6 }}>
-						{`${new Date(visit.startDate).toLocaleDateString("uk")} - ${
-							visit.endDate ? new Date(visit.endDate).toLocaleDateString("uk") : "сьогодні"
-						}`}
-					</ThemedText>
+					<VisitDetailsEditable key={visit.id} visit={visit} onDeleted={fetchVisits} onUpdated={fetchVisits} />
 				))}
 			{!editFormVisible && (
 				<Pressable onPress={() => setEditFormVisible(true)}>

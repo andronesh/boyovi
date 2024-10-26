@@ -20,6 +20,19 @@ export async function insertVisit(db: SQLiteDatabase, startDate: Date, endDate?:
 	return result.lastInsertRowId;
 }
 
+export async function updateVisit(db: SQLiteDatabase, id: number, startDate: Date, endDate?: Date) {
+	await db.runAsync(
+		"UPDATE visits SET startDate=?, endDate=? WHERE id=?",
+		startDate.getTime(),
+		endDate ? endDate.getTime() : null,
+		id,
+	);
+}
+
+export async function deleteVisit(db: SQLiteDatabase, id: number) {
+	await db.runAsync("DELETE FROM visits WHERE id=?", id);
+}
+
 export async function getVisitById(db: SQLiteDatabase, id: number): Promise<VisitEntity | null> {
 	return await db.getFirstAsync("SELECT * FROM visits WHERE id=?", id);
 }
